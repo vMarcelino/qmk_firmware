@@ -50,7 +50,7 @@
 #    define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_SOLID_COLOR // Sets the default mode, if none has been set
 #    define RGB_MATRIX_DEFAULT_HUE 21                      // Sets the default hue value, if none has been set
 #    define RGB_MATRIX_DEFAULT_SAT 200                     // Sets the default saturation value, if none has been set
-#    define RGB_MATRIX_DEFAULT_VAL RGB_MATRIX_MAXIMUM_BRIGHTNESS
+#    define RGB_MATRIX_DEFAULT_VAL 180
 // #    define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_STATIC_LIGHT
 // #    define RGBLIGHT_DEFAULT_HUE 21
 // #    define RGBLIGHT_DEFAULT_SAT 50
