@@ -37,6 +37,7 @@ enum {
     KC_RCMMD,
     KC_TASK,
     KC_FILE,
+    KC_SNAPC,
     KC_SNAP,
     KC_CTANA,
     KC_SIRI,

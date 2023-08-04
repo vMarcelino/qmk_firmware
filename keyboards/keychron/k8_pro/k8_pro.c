@@ -29,22 +29,26 @@
 #    include "factory_test.h"
 #endif
 
+#include "vMarcelino.h"
+
 #define POWER_ON_LED_DURATION 3000
 
 typedef struct PACKED {
     uint8_t len;
-    uint8_t keycode[3];
+    uint8_t keycode[4];
 } key_combination_t;
 
 static uint32_t power_on_indicator_timer_buffer;
 static uint32_t siri_timer_buffer = 0;
+static bool     mac_layout_switch = false;
 static uint8_t  mac_keycode[4]    = {KC_LOPT, KC_ROPT, KC_LCMD, KC_RCMD};
 
-key_combination_t key_comb_list[4] = {
-    {2, {KC_LWIN, KC_TAB}},        // Task (win)
-    {2, {KC_LWIN, KC_E}},          // Files (win)
-    {3, {KC_LSFT, KC_LGUI, KC_4}}, // Snapshot (mac)
-    {2, {KC_LWIN, KC_C}}           // Cortana (win)
+key_combination_t key_comb_list[5] = {
+    {2, {KC_LWIN, KC_TAB}},                 // Task (win)
+    {2, {KC_LWIN, KC_E}},                   // Files (win)
+    {4, {KC_LSFT, KC_LGUI, KC_LCTL, KC_4}}, // Snapshot to clipboard (mac)
+    {3, {KC_LSFT, KC_LGUI, KC_4}},          // Snapshot (mac)
+    {2, {KC_LWIN, KC_C}}                    // Cortana (win)
 };
 
 #ifdef KC_BLUETOOTH_ENABLE
@@ -61,6 +65,9 @@ static void pairing_key_timer_cb(void *arg) {
 bool dip_switch_update_kb(uint8_t index, bool active) {
     if (index == 0) {
         default_layer_set(1UL << (active ? 2 : 0));
+        // active = win
+        // !active = mac
+        mac_layout_switch = !active;
     }
     dip_switch_update_user(index, active);
 
@@ -73,6 +80,11 @@ bool process_record_kb_bt(uint16_t keycode, keyrecord_t *record) {
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 #endif
     static uint8_t host_idx = 0;
+
+    if (mac_layout_switch)
+        if (!vMarcelino_process_record_kb_bt(keycode, record)) {
+            return false;
+        }
 
     switch (keycode) {
         case KC_LOPTN:
@@ -88,6 +100,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case KC_TASK:
         case KC_FILE:
         case KC_SNAP:
+        case KC_SNAPC:
         case KC_CTANA:
             if (record->event.pressed) {
                 for (uint8_t i = 0; i < key_comb_list[keycode - KC_TASK].len; i++)
