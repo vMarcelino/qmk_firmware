@@ -38,6 +38,7 @@ bool vMarcelino_process_record_kb_bt(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
 
+        case KC_ENT:
         case KC_B:
         case KC_T:
         case KC_N:
@@ -95,6 +96,7 @@ bool vMarcelino_process_record_kb_bt(uint16_t keycode, keyrecord_t *record) {
             }
         }
 
+        case KC_BSPC:
         case KC_LEFT:
         case KC_RIGHT: {
             if (ctrl_pressed && !opt_pressed) {
